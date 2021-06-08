@@ -1,7 +1,7 @@
 # Installing Bind on Ubuntu 20.04
 
 1. Make sure there are no DNS servers running - e.g. dnsmasq
-```shell
+```console
 sudo systemctl stop dnsmasq.service
 sudo systemctl disable dnsmasq.service
 ```
