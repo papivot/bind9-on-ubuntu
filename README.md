@@ -18,7 +18,7 @@ sudo rndc status
 ```
 
 3. Modify the configuration files - named.conf.options - sample below
-```
+```text
 options {
 	directory "/var/cache/bind";
 	version none;
