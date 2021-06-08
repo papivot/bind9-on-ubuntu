@@ -97,12 +97,12 @@ $TTL	604800
 ```
 
 7. Restart the Bind service
-```
+```shell
 sudo systemctl restart named
 ```
 
 Troubleshooting commands - 
-```
+```shell
 sudo named-checkconf
 sudo journalctl -eu named
 sudo named-checkzone env1.lab.test db.env1.lab.test
@@ -110,7 +110,7 @@ sudo named-checkzone 100.168.192.in-addr.arpa db.100.168.192
 ```
 
 Check the resolution
-```
+```shell
 dig A vcsa1.env1.lab.test @192.168.100.1
 dig A vcsa1.env1.lab.test @192.168.102.1
 dig -x 192.168.100.50 @192.168.100.1
