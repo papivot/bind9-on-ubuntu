@@ -8,7 +8,7 @@ sudo systemctl disable dnsmasq.service
 
 2. Install the latest packages and update configurations are working
 ```shell
-sudo apt install bind9
+sudo apt install bind9 bind9-doc
 named -V
 sudo systemctl start named
 sudo systemctl enable named
@@ -68,5 +68,52 @@ harbor.env1.lab.test.			      IN 	CNAME	      ubuntu-nv-241.env1.lab.test.
 vcsa1.env1.lab.test.            IN      A       192.168.100.50
 esxi-11.env1.lab.test.          IN      A       192.168.100.51
 esxi-12.env1.lab.test.          IN      A       192.168.100.52
+...
+```
+
+6. Create the reverse lookup zone file in the correct folder - For e.g /etc/bind/zones/db.100.168.192
+```
+;
+; BIND reverse data file for local loopback interface
+;
+$TTL	604800
+@       IN      SOA     ubuntu-nv-241.env1.lab.test. admin.env1.lab.test. (
+			      7		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+; name servers - NS records
+     	NS      ubuntu-nv-241.env1.lab.test.
+
+; PTR Records
+1	PTR	ubuntu-nv-241.env1.lab.test.	;192.168.100.1
+
+50  	PTR     vcsa1.env1.lab.test.  	;192.168.100.50
+51  	PTR     esxi-11.env1.lab.test.  ;192.168.100.51
+52  	PTR     esxi-12.env1.lab.test.  ;192.168.100.52
+...
+```
+
+7. Restart the Bind service
+```
+sudo systemctl restart named
+```
+
+Troubleshooting commands - 
+```
+sudo named-checkconf
+sudo journalctl -eu named
+sudo named-checkzone env1.lab.test db.env1.lab.test
+sudo named-checkzone 100.168.192.in-addr.arpa db.100.168.192
+```
+
+Check the resolution
+```
+dig A vcsa1.env1.lab.test @192.168.100.1
+dig A vcsa1.env1.lab.test @192.168.102.1
+dig -x 192.168.100.50 @192.168.100.1
+dig -x 192.168.100.50 @192.168.102.1
 ...
 ```
