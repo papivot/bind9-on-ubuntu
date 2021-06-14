@@ -17,7 +17,7 @@ sudo netstat -lnptu
 sudo rndc status
 ```
 
-3. Modify the configuration files - named.conf.options - sample below. My external DNS is x.x.x.x and y.y.y.y. I only want BIND to listen in on my provate networks - 192.168.100.0/23, 192.168.102.0/23, 192.168.104.0/23
+3. Modify the configuration files - `/etc/bind/named.conf.options` - sample below. My external DNS is x.x.x.x and y.y.y.y. I only want BIND to listen in on my provate networks - 192.168.100.0/23, 192.168.102.0/23, 192.168.104.0/23
 ```
 options {
 	directory "/var/cache/bind";
@@ -31,7 +31,7 @@ options {
 };
 ```
 
-4. Create reference to forward and reverse lookup zone files - named.conf.local. My domain is env1.lab.test and the subnet for that is 192.168.100.0/23
+4. Create reference to forward and reverse lookup zone files - `/etc/bind/named.conf.local`. My domain is env1.lab.test and the subnet for that is 192.168.100.0/23
 ```
 zone "env1.lab.test" {
     type master;
@@ -44,7 +44,7 @@ zone "100.168.192.in-addr.arpa" {
 };
 ```
 
-5. Create the forward lookup zone file in the correct folder - e.g. /etc/bind/zones/db.env1.lab.test. The name of my Bind server is  ubuntu-nv-241.env1.lab.test.
+5. Create the forward lookup zone file in the correct folder - e.g. `/etc/bind/zones/db.env1.lab.test`. The name of my Bind server is  ubuntu-nv-241.env1.lab.test.
 ```
 ;
 ; BIND data file for local loopback interface
@@ -71,7 +71,7 @@ esxi-12.env1.lab.test.          IN      A       192.168.100.52
 ...
 ```
 
-6. Create the reverse lookup zone file in the correct folder - For e.g /etc/bind/zones/db.100.168.192
+6. Create the reverse lookup zone file in the correct folder - For e.g `/etc/bind/zones/db.100.168.192`
 ```
 ;
 ; BIND reverse data file for local loopback interface
