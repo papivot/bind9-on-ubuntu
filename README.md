@@ -22,11 +22,11 @@ sudo rndc status
 options {
 	directory "/var/cache/bind";
 	version none;
-  dnssec-validation no;
+	dnssec-validation no;
 	forwarders {x.x.x.x; y.y.y.y; 8.8.4.4;};
 	listen-on-v6 { none; }; 
-  listen-on { 127.0.0.1; 192.168.100.1; 192.168.102.1; 192.168.104.1;};
-  recursion yes;
+	listen-on { 127.0.0.1; 192.168.100.1; 192.168.102.1; 192.168.104.1;};
+	recursion yes;
 	allow-recursion { 127.0.0.1; 192.168.100.0/23; 192.168.102.0/23; 192.168.104.0/23;};
 };
 ```
