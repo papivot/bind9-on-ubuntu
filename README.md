@@ -117,3 +117,52 @@ dig -x 192.168.100.50 @192.168.100.1
 dig -x 192.168.100.50 @192.168.102.1
 ...
 ```
+
+---
+Adding dynamic update to bind
+```console
+sudo vi /etc/apparmor.d/local/usr.sbin.named 
+```
+Add the following entry, save and exit  - 
+`/etc/bind/zones/** rw,`
+
+Restart apparmor
+```console
+sudo systemctl restart apparmor
+```
+
+Add the following entries to `/etc/bind/named.conf.local` file
+```
+key "externaldns-key" {
+	algorithm hmac-sha256;
+	secret "JuXFt6ORFjAzHAHl48PnGPeLwukPfArS/Vzj+H2k/UA=";
+};
+
+zone "k8s.lab.test" {
+    type master;
+    file "/etc/bind/zones/db.k8s.lab.test";
+     allow-transfer {
+       key "externaldns-key";
+     };
+     update-policy {
+       grant externaldns-key zonesub ANY;
+     };
+};
+```
+
+Create a new `/etc/bind/zones/db.k8s.lab.test` file
+```
+$TTL 60	; 1 minute
+k8s.lab.test		IN SOA	k8s.lab.test. admin.k8s.lab.test. (
+				2          ; serial
+				60         ; refresh (1 minute)
+				60         ; retry (1 minute)
+				60         ; expire (1 minute)
+				60         ; minimum (1 minute)
+				)
+			NS	ubuntu-nv-071.env1.lab.test.
+```
+
+Chown -R bind:bind /etc/bind
+ restart the bind deamon. 
+Restart the bind deamon. 
